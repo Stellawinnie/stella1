@@ -12,7 +12,7 @@ $stmt = $user_home->runQuery("SELECT * FROM users WHERE userID=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$conn = mysqli_connect("localhost", "root", "", "attachment");
+$conn = mysqli_connect("localhost", "root", "12345678", "attachment");
 
 if(isset($_GET['applicants']))
 {
@@ -60,7 +60,7 @@ $postId = $_SESSION['applicants'];
     <div id="wrapper">
 
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -71,8 +71,17 @@ $postId = $_SESSION['applicants'];
                 <a class="navbar-brand" href="index.php">Saps</a>
             </div>
             <!-- /.navbar-header -->
-
+            <?php
+            $name = $row['userName'];
+            $i = 0;
+            $res = $conn->query("SELECT * FROM tbl_applicants WHERE companyName='$name' AND postId='$postId'");
+            while($Row=$res->fetch_array())
+            {
+              $i++;
+            }
+             ?>
             <ul class="nav navbar-top-links navbar-right">
+
               <li class="dropdown">
                   <a href="companyhome.php"><i class="fa fa-home fa-fw"></i> Home</a>
               </li>
@@ -89,92 +98,96 @@ $postId = $_SESSION['applicants'];
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
 
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
         </nav>
 
-        <div id="page-wrapper">
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                        <?php
-                        $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
-                        $Ro=$response->fetch_array();
-                         ?>
-                        <h4><?php echo $Ro['position']; ?></h4>
-                      </div>
-                        <div class="panel-body">
-
-
-                          <?php
-                          $name = $row['userName'];
-
-                          $res = $conn->query("SELECT * FROM tbl_applicants WHERE companyName='$name' AND postId='$postId'");
-                          while($Row=$res->fetch_array())
-                          {
-                            ?>
-                            <span class="fa fa-user"><a href="mailto:<?php echo $Row['userEmail']; ?>"><?php echo $Row['userName']; ?></a></span>
-                            <span class="pull-right">0<?php echo $Row['userPhone']; ?></span></br>
-                            <div class="well">
-                            <span><?php echo $Row['about']; ?></span>
-                          </div>
-                            <span class="pull-right text-muted"><?php echo $Row['postTime']; ?></span>
-                            <?php
-                          }
-                           ?>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-
-                <!-- /.col-lg-8 -->
-                <div class="col-lg-4">
-                    <div class="panel panel-default">
+                <div class="col-md-10 col-md-offset-1">
+                  <div class="row">
+                    <div class="col-md-8">
+                      <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> Posts
+                          <?php
+                          $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
+                          $Ro=$response->fetch_array();
+                           ?>
+                          <h4><?php echo $Ro['position']; ?></h4>
                         </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="list-group">
-                              <?php
-                              $name = $row['userName'];
-                              $res = $conn->query("SELECT * FROM tbl_posts WHERE companyName='$name'");
-                              while($Row=$res->fetch_array())
-                              {
-                               ?>
-                              <span class="list-group-item">
-                                  <a href="?applicants=<?php echo $Row['id']; ?>"><span class="fa fa-folder-open-o fa-fw"></span>View</a>
-                                  <span><h3><?php echo $Row['position']; ?></h3></span>
-                                  <span><?php echo $Row['detail']; ?></span><br>
-                                  <span class="text-muted fa fa-user fa-fw"><?php echo $Row['numb']; ?></span>
-
-                                  <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
-
-                              </span>
-                              <?php
-                              }
+                          <div class="panel-body">
+                            <button class="btn btn-lg btn-block btn-info"><i class="fa fa-spinner fa-spin"></i> <?php echo $i; ?> Applicants.</button>
+                            <br>
+                            <?php
+                            $name = $row['userName'];
+                            $res = $conn->query("SELECT * FROM tbl_applicants WHERE companyName='$name' AND postId='$postId'");
+                            while($Row=$res->fetch_array())
+                            {
                               ?>
+
+                              <div class="well">
+                              <span class="fa fa-user"><a href="mailto:<?php echo $Row['userEmail']; ?>"><?php echo $Row['userName']; ?></a></span>
+                              <span class="pull-right">0<?php echo $Row['userPhone']; ?></span>
+                              <hr>
+                              <span><?php echo $Row['about']; ?></span>
+                              <hr>
+                              <span class="pull-right text-muted"><?php echo $Row['postTime']; ?></span>
                             </div>
-                            <!-- /.list-group -->
-                        </div>
-                        <!-- /.panel-body -->
+                              <br>
+                              <?php
+                            }
+                             ?>
+                          </div>
+                          <!-- /.panel-body -->
+                      </div>
+                      <!-- /.panel -->
+
+
+
                     </div>
-                    <!-- /.panel -->
+
+                    <!-- /.col-lg-8 -->
+                    <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-bell fa-fw"></i> Posts
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="list-group">
+                                  <?php
+                                  $name = $row['userName'];
+                                  $res = $conn->query("SELECT * FROM tbl_posts WHERE companyName='$name'");
+                                  while($Row=$res->fetch_array())
+                                  {
+                                   ?>
+                                  <span class="list-group-item">
+                                      <a href="?applicants=<?php echo $Row['id']; ?>"><span class="fa fa-folder-open-o fa-fw"></span>View</a>
+                                      <span><h3><?php echo $Row['position']; ?></h3></span>
+                                      <span><?php echo $Row['detail']; ?></span><br>
+                                      <span class="text-muted fa fa-user fa-fw"><?php echo $Row['numb']; ?></span>
+
+                                      <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
+
+                                  </span>
+                                  <?php
+                                  }
+                                  ?>
+                                </div>
+                                <!-- /.list-group -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-6 -->
+
+                  </div>
+
                 </div>
-                <!-- /.col-lg-6 -->
+
+
             </div>
             <!-- /.row -->
-        </div>
-        <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->

@@ -4,7 +4,7 @@ require_once 'class.user.php';
 $user_login = new USER();
 
 
-$conn = mysqli_connect("localhost", "root", "", "attachment");
+$conn = mysqli_connect("localhost", "root", "12345678", "attachment");
 
 if(isset($_GET['category']))
 {
@@ -150,6 +150,7 @@ if(isset($_GET['apply']))
       <div class="col-md-8 col-md-offset-2"><br><br><br><br>
           <div class="panel panel-info">
             <div class="panel-heading">
+
             </div>
               <div class="panel-body">
                 <div class="list-group">

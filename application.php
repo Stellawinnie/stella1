@@ -3,7 +3,7 @@ session_start();
 require_once 'class.user.php';
 $user_login = new USER();
 
-$conn = mysqli_connect("localhost", "root", "", "attachment");
+$conn = mysqli_connect("localhost", "root", "12345678", "attachment");
 $msg = "";
 
 if(isset($_GET['category']))
@@ -61,17 +61,20 @@ if(isset($_POST['save']) && isset($_FILES['uploaded_file']) && $_FILES['uploaded
           $mail->SMTPAuth = true;
           $mail->Host = 'smtp.gmail.com';
           $mail->Port = 587;
-          $mail->Username = 'stellawinnie12@gmail.com';
-          $mail->Password = 'jepchumba2';
+          $mail->Username = 'beja.emmanuel@gmail.com';
+          $mail->Password = '#1Atom .';
           $mail->AddAttachment($_FILES['uploaded_file']['tmp_name'], $_FILES['uploaded_file']['name']);
           $mail->setFrom('DoNotReply@gmail.com', 'Saps');
           $mail->addAddress($companyemail);
           $mail->Subject = 'Saps! Application';
           $mail->Body = " Hello $companyName,
-          $userName has just applied for the position you posted.Bellow are his/her application credentials and acompanying documents.
-          Applicant Email: $userEmail
-          Applicant Phone: 0$userPhone
+          $userName has just applied for the position you posted.
+          Bellow are his/her application credentials and acompanying documents.
+
+          Email: $userEmail
+          Phone: $userPhone
           About: $about
+
           Thank you for using Saps,";
           //send the message, check for errors
           if (!$mail->send()) {
@@ -121,17 +124,20 @@ if(isset($_POST['save']) && isset($_FILES['uploaded_file']) && $_FILES['uploaded
           $mail->SMTPAuth = true;
           $mail->Host = 'smtp.gmail.com';
           $mail->Port = 587;
-          $mail->Username = 'stellawinnie12@gmail.com';
-          $mail->Password = 'jepchumba2';
+          $mail->Username = 'beja.emmanuel@gmail.com';
+          $mail->Password = '#1Atom .';
           $mail->AddAttachment($_FILES['uploaded_file']['tmp_name'], $_FILES['uploaded_file']['name']);
           $mail->setFrom('DoNotReply@gmail.com', 'Saps');
           $mail->addAddress($companyemail);
           $mail->Subject = 'Saps! Application';
           $mail->Body = " Hello $companyName,
-          $userName has just applied for the position you posted.Bellow are his/her application credentials and acompanying documents.
-          Applicant Email: $userEmail
-          Applicant Phone: 0$userPhone
+          $userName has just applied for the position you posted.
+          Bellow are his/her application credentials and acompanying documents.
+
+          Email: $userEmail
+          Phone: $userPhone
           About: $about
+
           Thank you for using Saps,";
           //send the message, check for errors
           if (!$mail->send()) {
@@ -316,8 +322,8 @@ if(isset($_GET['apply']))
                   <div class="list-group">
                     <form method="post" enctype="multipart/form-data">
                       <div class="form-group">
-                          
-                          <input type="hidden" name="companyName" placeholder="" class="form-control" value="<?php echo $Row['companyName']?>" autofocus required/>
+                          <label for="companyName">To</label>
+                          <input type="text" name="companyName" placeholder="" class="form-control" value="<?php echo $Row['companyName']?>" autofocus required/>
                       </div>
 
                       <div class="form-group">
@@ -345,15 +351,14 @@ if(isset($_GET['apply']))
                         </div>
 
                         <div class="form-group">
+                            <input type="hidden"  id="postTime" name="postTime" placeholder="" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
                           <label for="uploaded_file">CV</label>
                            <input type="file" name="uploaded_file" id="uploaded_file"/>
                         </div>
 
-
-
-                        <div class="form-group">
-                            <input type="hidden" id="postTime" name="postTime" placeholder="" class="form-control"/>
-                        </div>
 
                          <button type="submit" class="btn btn-info" name="save">Submit</button>
 
