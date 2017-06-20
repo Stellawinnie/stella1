@@ -65,7 +65,15 @@ if(isset($_GET['del']))
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-
+    <script>
+    function printContent(el){
+    	var restorepage = document.body.innerHTML;
+    	var printcontent = document.getElementById(el).innerHTML;
+    	document.body.innerHTML = printcontent;
+    	window.print();
+    	document.body.innerHTML = restorepage;
+    }
+    </script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -93,9 +101,12 @@ if(isset($_GET['del']))
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-              <li>
-                 <a href="companies.php"><i class="fa  fa-fw"></i> Generate Report</a>
-              </li>
+                <li>
+                  <button class="btn btn-info" onclick="printContent('companies')">Print Companies</button>
+                </li>
+                <li>
+                        <li><a href="adminhome.php"><i class="fa fa-home fa-fw"></i>Home</a>
+                </li>
                 <li>
                         <li><a href="logout.php"><i class="fa fa-sign-out fa-fw"></i>Hello <?php echo $row['userName']; ?>! Logout</a>
                 </li>
@@ -104,31 +115,48 @@ if(isset($_GET['del']))
             <!-- /.navbar-top-links -->
         </nav>
             <!-- /.row -->
-            <div class="row">
+
+            <div id="companies" class="row">
                 <div class="col-md-8 col-md-offset-2">
                     <div class="panel panel-default">
                       <div class="panel-heading">
                           <i class="fa fa-group fa-fw">Companies</i>
                       </div>
                         <div class="panel-body">
-                          <?php
-
-
-                          $query = "SELECT * from users ";
-                          $result = mysqli_query($conn, $query);
-                          $row = mysqli_fetch_assoc($result);
-                           while($row = mysqli_fetch_assoc($result)){ ?>
-                         <div class="well">
-                           <span class="fa fa-user"><?php echo $row['userName']; ?></span>
-                           <span class="fa fa-upload pull-right"><a href="?posts=<?php echo $row['userName']; ?>">Posts</a></span>
-                           <span class="fa fa-folder pull-right"><a href="?applicants=<?php echo $row['userName']; ?>">Applicants</a></span>
-                           <br>
-                            <span class="fa fa-email"><?php echo $row['userEmail']; ?></span>
-                            <br>
-                            <span class="fa fa-phone"><?php echo $row['userPhone']; ?></span>
-                            <a href="?del=<?php echo $row['userID']; ?>"><span class="fa fa-trash-o fa-fw pull-right"></span></a>
+                          <div class="well">
+                            <center>Companies Report</center>
                           </div>
-                          <?php } ?>
+                          <table>
+                            <tr>
+                              <th style="width:40%;">
+                                Company Name
+                              </th>
+                              <th style="width:40%;">
+                                Phone Number
+                              </th>
+                              <th style="width:40%;">
+                                Email
+                              </th>
+                            </tr>
+                            <?php
+                            $query = "SELECT * from users ";
+                            $result = mysqli_query($conn, $query);
+                            $row = mysqli_fetch_assoc($result);
+                             while($row = mysqli_fetch_assoc($result)){ ?>
+                            <tr>
+                              <td>
+                                <?php echo $row['userName']; ?>
+                              </td>
+                              <td>
+                                <?php echo $row['userPhone']; ?>
+                              </td>
+                              <td>
+                                <?php echo $row['userEmail']; ?>
+                              </td>
+                            </tr>
+                            <?php } ?>
+                          </table>
+
                         </div>
                     </div>
                 </div>
@@ -160,43 +188,7 @@ if(isset($_GET['del']))
 
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
-    <!-- validity timer -->
-    <script type="text/javascript">
-      function countdown(){
-        var now = new Date();
-        var currentTime = now.getTime();
-        var eventDate = new Date(2017,6,27);
-        //eventDate.setDate(27);//doesnt seem to work
-        eventDate.setHours(21);
-        eventDate.setMinutes(00);
-        var eventTime = eventDate.getTime();
 
-        var remTime = eventTime - currentTime;
-
-        var s = Math.floor(remTime / 1000);
-        var m = Math.floor(s / 60);
-        var h = Math.floor(m / 60);
-        //var d = Math.floor(h / 24);
-
-        h %=24;
-        m %=60;
-        s %=60;
-
-        h = (h < 10) ? "0" + h :h;
-        m = (m < 10) ? "0" + m :m;
-        s = (s < 10) ? "0" + s :s;
-
-        //document.getElementById("days").textContent = d;//not supported in ie8 and earlier versions
-        //document.getElementById("days").innerText = d;//to suport ie8 and earlier versions
-
-        document.getElementById("hours").textContent = h;
-        document.getElementById("minutes").textContent = m;
-        document.getElementById("seconds").textContent = s;
-
-        setTimeout(countdown, 1000);
-        }
-      countdown();
-    </script>
 </body>
 
 </html>

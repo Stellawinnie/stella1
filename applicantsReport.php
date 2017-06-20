@@ -46,6 +46,15 @@ $postId = $_SESSION['applicants'];
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
+    <script>
+    function printContent(el){
+    	var restorepage = document.body.innerHTML;
+    	var printcontent = document.getElementById(el).innerHTML;
+    	document.body.innerHTML = printcontent;
+    	window.print();
+    	document.body.innerHTML = restorepage;
+    }
+    </script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -86,8 +95,9 @@ $postId = $_SESSION['applicants'];
                   <a href="companyhome.php"><i class="fa fa-home fa-fw"></i> Home</a>
               </li>
               <li class="dropdown">
-                  <a href="applicantsReport.php"><i class="fa fa-home fa-fw"></i> Generate Report</a>
+                  <button class="btn btn-info" onclick="printContent('applicants')">Print Applicants</button>
               </li>
+
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <?php echo $row['userName']?><i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
@@ -103,22 +113,25 @@ $postId = $_SESSION['applicants'];
             <!-- /.navbar-top-links -->
 
         </nav>
+
             <!-- /.row -->
-            <div class="row">
+            <div  class="row">
                 <div class="col-md-10 col-md-offset-1">
                   <div class="row">
-                    <div class="col-md-8">
+
+                    <div id="applicants" class="col-md-12">
                       <div class="panel panel-default">
                         <div class="panel-heading">
                           <?php
                           $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
                           $Ro=$response->fetch_array();
                            ?>
-                          <h4><?php echo $Ro['position']; ?></h4>
+                          <h4><?php echo $Ro['position']; ?> <span class="pull-right"><?php echo $i; ?> applicants</span></h4>
+
                         </div>
                           <div class="panel-body">
-                            <button class="btn btn-lg btn-block btn-info"><i class="fa fa-spinner fa-spin"></i> <?php echo $i; ?> Applicants.</button>
                             <br>
+
                             <?php
                             $name = $row['userName'];
                             $res = $conn->query("SELECT * FROM tbl_applicants WHERE companyName='$name' AND postId='$postId'");
@@ -126,15 +139,16 @@ $postId = $_SESSION['applicants'];
                             {
                               ?>
 
-                              <div class="well">
-                              <span class="fa fa-user"><a href="mailto:<?php echo $Row['userEmail']; ?>"><?php echo $Row['userName']; ?></a></span>
+                              <span class=""><h4>Name:<?php echo $Row['userName']; ?></h4></span>
                               <span class="pull-right">0<?php echo $Row['userPhone']; ?></span>
                               <hr>
+                              <h4>About</h4>
                               <span><?php echo $Row['about']; ?></span>
                               <hr>
-                              <span class="pull-right text-muted"><?php echo $Row['postTime']; ?></span>
-                            </div>
+                              <span class="text-muted"><?php echo $Row['postTime']; ?></span>
                               <br>
+                              <hr>
+                              <hr>
                               <?php
                             }
                              ?>
@@ -147,41 +161,7 @@ $postId = $_SESSION['applicants'];
 
                     </div>
 
-                    <!-- /.col-lg-8 -->
-                    <div class="col-lg-4">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-bell fa-fw"></i> Posts
-                            </div>
-                            <!-- /.panel-heading -->
-                            <div class="panel-body">
-                                <div class="list-group">
-                                  <?php
-                                  $name = $row['userName'];
-                                  $res = $conn->query("SELECT * FROM tbl_posts WHERE companyName='$name'");
-                                  while($Row=$res->fetch_array())
-                                  {
-                                   ?>
-                                  <span class="list-group-item">
-                                      <a href="?applicants=<?php echo $Row['id']; ?>"><span class="fa fa-folder-open-o fa-fw"></span>View</a>
-                                      <span><h3><?php echo $Row['position']; ?></h3></span>
-                                      <span><?php echo $Row['detail']; ?></span><br>
-                                      <span class="text-muted fa fa-user fa-fw"><?php echo $Row['numb']; ?></span>
 
-                                      <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
-
-                                  </span>
-                                  <?php
-                                  }
-                                  ?>
-                                </div>
-                                <!-- /.list-group -->
-                            </div>
-                            <!-- /.panel-body -->
-                        </div>
-                        <!-- /.panel -->
-                    </div>
-                    <!-- /.col-lg-6 -->
 
                   </div>
 
