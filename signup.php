@@ -12,7 +12,7 @@ if($reg_user->is_logged_in()!="")
   if($row['loginType']=="admin"){
     $reg_user->redirect('adminhome.php');
   } else if ($row['loginType']=="company"){
-    $reg_user->redirect('companyhome.php');
+    $user_login->redirect('companyhome.php');
   }
 }
 
@@ -43,45 +43,14 @@ if(isset($_POST['btn-signup']))
  {
   if($reg_user->register($uname,$email,$upass,$uphone,$urole,$code))
   {
-   $id = $reg_user->lasdID();
-   $key = base64_encode($id);
-   $id = $key;
-   require 'PHPMailer/PHPMailerAutoload.php';
-   $mail = new PHPMailer;
-   $mail->isSMTP();
-   $mail->SMTPSecure = 'tls';
-   $mail->SMTPAuth = true;
-   $mail->Host = 'smtp.gmail.com';
-   $mail->Port = 587;
-   $mail->Username = 'stellawinnie12@gmail.com';
-   $mail->Password = 'jepchumba2';
-   $mail->setFrom('DoNotReply@gmail.com', 'Saps');
-   $mail->addAddress($email);
-   $mail->Subject = 'Saps! Confirm Registration';
-   $mail->Body = " Hello $uname,
-   Welcome to Saps!
-   To complete your registration, please click on the link bellow
-   http://localhost:8080/SAPS/verify.php?id=$id&code=$code
-
-   Thanks,";
-   //send the message, check for errors
-   if (!$mail->send()) {
-     $msg = "
-       <div class='alert alert-danger'>
-        <button class='close' data-dismiss='alert'>&times;</button>
-        <strong>Error!</strong>  Couldnt send email to $email.
-                      Please try again.
-         </div>
+    $_SESSION['msg'] = "
+          <div class='alert alert-success'>
+      <button class='close' data-dismiss='alert'>&times;</button>
+       <strong>Success !</strong> You are successfully signed up. Log in
+       </div>
        ";
-   } else {
-     $msg = "
-       <div class='alert alert-success'>
-        <button class='close' data-dismiss='alert'>&times;</button>
-        <strong>Success!</strong>  We've sent an email to $email.
-                      Please click on the confirmation link in the email to create your account.
-         </div>
-       ";
-   }
+       sleep(4);
+       header("location:login.php");
  }else
   {
    echo "sorry , Query could no execute...";

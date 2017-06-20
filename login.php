@@ -115,6 +115,9 @@ if(isset($_POST['btn-login']))
                               <?php
                               }
                               ?>
+                              <?php if(isset($_SESSION['msg'])){
+                                echo $_SESSION['msg'];
+                              }?>
                                 <div class="form-group">
                                     <input class="form-control" placeholder="E-mail" name="txtemail" type="email" autofocus required>
                                 </div>

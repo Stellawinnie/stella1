@@ -12,7 +12,7 @@ $stmt = $user_home->runQuery("SELECT * FROM users WHERE userID=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$conn = mysqli_connect("localhost", "root", "", "attachment");
+$conn = mysqli_connect("localhost", "root", "12345678", "attachment");
 
 /* code for data insert */
 if(isset($_POST['save']))
@@ -184,10 +184,7 @@ if(isset($_GET['applicants']))
                                                               <input type="text" name="position" placeholder="Position you are looking for." value="<?php  if(isset($_GET['edit'])){echo $Row['position'];}   ?>" class="form-control"/>
                                                           </div>
 
-                                                          <div class="form-group">
-                                                              
                                                               <input type="hidden" name="level" placeholder="" value="Attachment" class="form-control"/>
-                                                          </div>
 
                                                           <div class="form-group">
                                                             <label for="category">Category</label>

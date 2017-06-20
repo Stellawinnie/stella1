@@ -10,12 +10,12 @@ if(isset($_GET['category']))
  header("Location: field.php");
 }
 
-if(isset($_GET['field']))
-{
-  $_SESSION['category']=$_GET['field'];
-  $_SESSION['lev']= "Job";
- header("Location: field.php");
-}
+//if(isset($_GET['field']))
+//{
+//  $_SESSION['category']=$_GET['field'];
+//  $_SESSION['lev']= "Job";
+// header("Location: field.php");
+//}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +67,7 @@ if(isset($_GET['field']))
             <img class="" src="img/logo.png" alt="Amatch">
           </div>-->
 
-          <h1>Welcome to Amatch</h1>
+          <h1>Welcome to SAPS</h1>
           <h2><span class="rotating">We provide attachees with attachment oppotunities, We provide companies with a platform to post attachment or job oppotunities, Register your company with us today!</span></h2>
           <div class="actions">
             <a href="#about" class="btn-get-started">Get Started</a>

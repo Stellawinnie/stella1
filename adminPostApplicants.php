@@ -8,33 +8,20 @@ if(!$user_home->is_logged_in())
  $user_home->redirect('login.php');
 }
 
-
-if(isset($_GET['applicants'])){
-  $_SESSION['companyName'] = $_GET['applicants'];
-  header("location:adminApplicants.php");
-}
-
-if(isset($_GET['posts'])){
-  $_SESSION['companyName'] = $_GET['posts'];
-  header("location:adminPosts.php");
-}
-
 $stmt = $user_home->runQuery("SELECT * FROM users WHERE userID=:uid");
 $stmt->execute(array(":uid"=>$_SESSION['userSession']));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $conn = mysqli_connect("localhost", "root", "12345678", "attachment");
 
-
-/* code for data delete */
-if(isset($_GET['del']))
+$postId = $_SESSION['applicants'];
+$i = 0;
+$res = $conn->query("SELECT * FROM tbl_applicants WHERE postId='$postId'");
+while($Row=$res->fetch_array())
 {
- $SQL = $conn->prepare("DELETE FROM users WHERE userID=".$_GET['del']);
- $SQL->bind_param("i",$_GET['del']);
- $SQL->execute();
- header("Location: adminhome.php");
+  $i++;
 }
-/* code for data delete */
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,7 +52,6 @@ if(isset($_GET['del']))
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -93,47 +79,63 @@ if(isset($_GET['del']))
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-              <li>
-                 <a href="companies.php"><i class="fa  fa-fw"></i> Generate Report</a>
-              </li>
                 <li>
-                        <li><a href="logout.php"><i class="fa fa-sign-out fa-fw"></i>Hello <?php echo $row['userName']; ?>! Logout</a>
+                  <li><a href="adminhome.php"><i class="fa fa-home fa-fw"></i> Home</a>
+                </li>
+
+                <li >
+                        <li><a href="logout.php"><i class="fa fa-sign-out fa-fw"></i> Hello <?php echo $row['userName']; ?>! Logout</a>
                 </li>
                 <!-- /.dropdown -->
             </ul>
             <!-- /.navbar-top-links -->
         </nav>
+
             <!-- /.row -->
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
-                    <div class="panel panel-default">
-                      <div class="panel-heading">
-                          <i class="fa fa-group fa-fw">Companies</i>
+                  <div class="panel panel-default">
+                    <div class="panel-heading">
+                      <?php
+                      $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
+                      $Ro=$response->fetch_array();
+                       ?>
+                      <h4><?php echo $Ro['position']; ?></h4>
+                    </div>
+                      <div class="panel-body">
+                        <button class="btn btn-lg btn-block btn-info"><i class="fa fa-spinner fa-spin"></i> <?php echo $i; ?> Applicants.</button>
+                        <br>
+                        <?php
+                        $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
+                        $Ro=$response->fetch_array();
+                         ?>
+                        <h4><?php echo $Ro['position']; ?></h4>
                       </div>
                         <div class="panel-body">
                           <?php
+                          $res = $conn->query("SELECT * FROM tbl_applicants WHERE postId='$postId'");
+                          while($Row=$res->fetch_array())
+                          {
+                            ?>
 
-
-                          $query = "SELECT * from users ";
-                          $result = mysqli_query($conn, $query);
-                          $row = mysqli_fetch_assoc($result);
-                           while($row = mysqli_fetch_assoc($result)){ ?>
-                         <div class="well">
-                           <span class="fa fa-user"><?php echo $row['userName']; ?></span>
-                           <span class="fa fa-upload pull-right"><a href="?posts=<?php echo $row['userName']; ?>">Posts</a></span>
-                           <span class="fa fa-folder pull-right"><a href="?applicants=<?php echo $row['userName']; ?>">Applicants</a></span>
-                           <br>
-                            <span class="fa fa-email"><?php echo $row['userEmail']; ?></span>
-                            <br>
-                            <span class="fa fa-phone"><?php echo $row['userPhone']; ?></span>
-                            <a href="?del=<?php echo $row['userID']; ?>"><span class="fa fa-trash-o fa-fw pull-right"></span></a>
+                            <div class="well">
+                            <span class="fa fa-user"><a href="mailto:<?php echo $Row['userEmail']; ?>"><?php echo $Row['userName']; ?></a></span>
+                            <span class="pull-right">0<?php echo $Row['userPhone']; ?></span>
+                            <hr>
+                            <span><?php echo $Row['about']; ?></span>
+                            <hr>
+                            <span class="pull-right text-muted"><?php echo $Row['postTime']; ?></span>
                           </div>
-                          <?php } ?>
-                        </div>
-                    </div>
+                            <br>
+                            <?php
+                          }
+                           ?>
+                      </div>
+                      <!-- /.panel-body -->
+                  </div>
+                  <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-8 -->
-                <!-- /.col-lg-4 -->
             </div>
             <!-- /.row -->
 
