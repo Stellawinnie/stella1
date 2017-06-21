@@ -27,16 +27,25 @@ if(isset($_POST['save']))
     $location =  $_POST['location'];
    	$detail = $_POST['detail'];
    	$numb  = $_POST['numb'];
-   	$postTime = $_POST['postTime'];
+   	//$postTime = $_POST['postTime'];
+    $startDate = $_POST['startDate'];
+    $duration = $_POST['duration'];
+    $deadlineDay = $_POST['deadlineDay'];
+    $deadlineMonth = $_POST['deadlineMonth'];
+    $deadlineYear = $_POST['deadlineYear'];
 
-  $SQL = $conn->prepare("INSERT INTO tbl_posts(companyName, companyEmail, companyPhone, position, level, category, detail, location, numb, postTime, startDate, stopDate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-  $SQL->bind_param('ssssssssssss',$companyName, $companyEmail, $companyPhone, $position, $level, $category,  $detail, $location, $numb, $postTime, $startDate, $stopDate);
-  $SQL->execute();
+
+  $SQL = $conn->prepare("INSERT INTO tbl_posts(companyName, companyEmail, companyPhone, position, level, category, detail, location, numb, startDate, duration, deadlineDay,deadlineMonth,deadlineYear) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
 
   if(!$SQL)
   {
-   echo $MySQLiconn->error;
-  }
+   echo $conn->error;
+ }else{
+   $SQL->bind_param('ssssssssssiiii',$companyName, $companyEmail, $companyPhone, $position, $level, $category,  $detail, $location, $numb, $startDate, $duration, $deadlineDay,$deadlineMonth, $deadlineYear);
+   $SQL->execute();
+   echo "ndaani";
+ }
 }
 /* code for data insert */
 
@@ -70,12 +79,24 @@ if(isset($_POST['update']))
  $level =  $_POST['level'];
  $category =  $_POST['category'];
  $detail = $_POST['detail'];
+ $location = $_POST['location'];
  $numb  = $_POST['numb'];
- $postTime = $_POST['postTime'];
+ //$postTime = $_POST['postTime'];
+ $startDate = $_POST['startDate'];
+ $duration = $_POST['duration'];
+ $deadlineDay = $_POST['deadlineDay'];
+ $deadlineMonth = $_POST['deadlineMonth'];
+ $deadlineYear = $_POST['deadlineYear'];
 
- $SQL = $conn->prepare("UPDATE tbl_posts SET companyName=?, companyEmail=?, companyPhone=?, position=?, level=?, category=?, detail=?, numb=?, postTime=? WHERE id=?");
- $SQL->bind_param("sssssssssi",$companyName, $companyEmail, $companyPhone, $position, $level, $category, $detail, $numb, $postTime, $_GET['edit']);
- $SQL->execute();
+ $SQL = $conn->prepare("UPDATE tbl_posts SET companyName=?, companyEmail=?, companyPhone=?, position=?, level=?, category=?, detail=?, location=?, numb=?, postTime=?, startDate=?, duration=?, deadlineDay=?,deadlineMonth=?,deadlineYear=? WHERE id=?");
+
+ if(!$SQL)
+ {
+  echo $conn->error;
+}else{
+  $SQL->bind_param("sssssssssssiiiii",$companyName, $companyEmail, $companyPhone, $position, $level, $category, $detail, $location, $numb, $postTime, $startDate, $duration, $deadlineDay,$deadlineMonth, $deadlineYear, $_GET['edit']);
+  $SQL->execute();
+}
  header("Location: companyhome.php");
 }
 /* code for data update */
@@ -108,8 +129,40 @@ if(isset($_GET['applicants']))
     <!-- Custom CSS -->
     <link href="dist/css/sb-admin-2.css" rel="stylesheet">
 
+    <link rel="stylesheet" type="text/css" href="datepicker.css" />
+    <script type="text/javascript" src="datepicker.js"></script>
+
+<!--
+    <script>
+  function startTime() {
+    var today = new Date();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    // add a zero in front of numbers<10
+    m = checkTime(m);
+    s = checkTime(s);
+    document.getElementById("postTime").value = h + ":" + m + ":" + s;
+    var t = setTimeout(function(){ startTime() }, 10);
+  }
+
+  function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+  }
+  </script>
+-->
     <!-- Custom Fonts -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- jQuery
+    <link rel="stylesheet" href="css/jquery-ui.css">
+
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <script src="js/jquery-ui.js"></script>-->
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -166,18 +219,15 @@ if(isset($_GET['applicants']))
                         <div class="panel-body">
                           <form method="post">
                                                         <div class="form-group">
-                                                            <label for="companyName">Name</label>
-                                                            <input type="text" name="companyName" placeholder="" class="form-control" value="<?php echo $row['userName']?>" autofocus required/>
+                                                            <input type="hidden" name="companyName" placeholder="" class="form-control" value="<?php echo $row['userName']?>" autofocus required/>
                                                         </div>
 
                                                         <div class="form-group">
-                                                            <label for="companyEmail">Email</label>
-                                                            <input type="text" name="companyEmail" placeholder="Your email" value="<?php echo $row['userEmail']; ?>" class="form-control"/>
+                                                            <input type="hidden" name="companyEmail" placeholder="Your email" value="<?php echo $row['userEmail']; ?>" class="form-control"/>
                                                         </div>
 
                                                           <div class="form-group">
-                                                              <label for="companyPhone">Phone Number</label>
-                                                              <input type="text" name="companyPhone" placeholder="" value="<?php echo $row['userPhone'];  ?>" class="form-control"/>
+                                                              <input type="hidden" name="companyPhone" placeholder="" value="<?php echo $row['userPhone'];  ?>" class="form-control"/>
                                                           </div>
 
                                                           <div class="form-group">
@@ -223,19 +273,27 @@ if(isset($_GET['applicants']))
                                                          </div>
 
                                                          <div class="form-group">
-                                                             <label for="startDate">Start Date</label>
-                                                             <input type="text" name="startDate" placeholder="Day Attachment Starts" value="<?php  if(isset($_GET['edit'])){echo $Row['startDate'];}   ?>" class="form-control"/>
+                                                             <label for="startDate">Start Date</label><br>
+                                                             <input type="text" id="start_dt" name="startDate" placeholder="Attachment Starts" value="<?php  if(isset($_GET['edit'])){echo $Row['startDate'];}   ?>" class=" datepicker" size='11'/>
                                                          </div>
 
                                                          <div class="form-group">
-                                                             <label for="stopDate">To</label>
-                                                             <input type="text" name="stopDate" placeholder="Day Attachment Ends" value="<?php  if(isset($_GET['edit'])){echo $Row['stopDate'];}   ?>" class="form-control"/>
+                                                             <label for="duration">Duration</label>
+                                                             <input type="text"  name="duration" placeholder="Attachment Period(months)" value="<?php  if(isset($_GET['edit'])){echo $Row['duration'];}   ?>" class="form-control"/>
                                                          </div>
 
+                                                         <div class="form-group">
+                                                             <label for="deadline">Application Deadline</label><br>
+                                                             <input type="text" name="deadlineDay"  placeholder="Day(eg. 10)" value="<?php  if(isset($_GET['edit'])){echo $Row['deadlineDay'];}   ?>" />
+                                                             <input type="text" name="deadlineMonth"  placeholder="Month(eg. 6)" value="<?php  if(isset($_GET['edit'])){echo $Row['deadlineMonth'];}   ?>" />
+                                                             <input type="text" name="deadlineYear"  placeholder="Year(eg. 2017)" value="<?php  if(isset($_GET['edit'])){echo $Row['deadlineYear'];}   ?>" />
+                                                         </div>
+                                                          <!--
                                                           <div class="form-group">
                                                               <label for="postTime"></label>
                                                               <input type="hidden" id="postTime" name="postTime" placeholder="" class="form-control"/>
                                                           </div>
+                                                        -->
                                                           <?php
                                                           if(isset($_GET['edit']))
                                                           {
@@ -282,7 +340,7 @@ if(isset($_GET['applicants']))
                                   <span><?php echo $Row['detail']; ?></span><br>
                                   <span class="text-muted fa fa-user fa-fw"><?php echo $Row['numb']; ?></span>
 
-                                  <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
+                                  <span class="text-muted pull-right"><?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
 
                               </span>
                               <?php
@@ -337,26 +395,9 @@ if(isset($_GET['applicants']))
     <!-- Custom Theme JavaScript -->
     <script src="dist/js/sb-admin-2.js"></script>
 
-    <script>
-function startTime() {
-    var today = new Date();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds();
-    // add a zero in front of numbers<10
-    m = checkTime(m);
-    s = checkTime(s);
-    document.getElementById("postTime").value = h + ":" + m + ":" + s;
-    var t = setTimeout(function(){ startTime() }, 10);
-}
 
-function checkTime(i) {
-    if (i < 10) {
-        i = "0" + i;
-    }
-    return i;
-}
-</script>
+
+
 </body>
 
 </html>

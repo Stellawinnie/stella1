@@ -324,7 +324,7 @@ $postId = $_SESSION['applicants'];
                                       <span><?php echo $Row['detail']; ?></span><br>
                                       <span class="text-muted fa fa-user fa-fw"><?php echo $Row['numb']; ?></span>
 
-                                      <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
+                                      <span class="text-muted pull-right"><?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
 
                                   </span>
                                   <?php

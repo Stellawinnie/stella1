@@ -33,7 +33,9 @@ if(isset($_GET['apply']))
 if(isset($_GET['location']))
 {
   $_SESSION['location']=$_GET['location'];
-}else if($_SESSION['location']==""){
+}
+
+if($_SESSION['location']==""){
   $_SESSION['location']='General';
 }
 ?>
@@ -153,52 +155,155 @@ if(isset($_GET['location']))
                     $gen = 'General';
                     $res = $conn->query("SELECT * FROM tbl_posts WHERE category='$cat' AND level='$lev'");
                     while($Row=$res->fetch_array()) {
-                      if($Row['location']==$loc){
-                        $i++;
-                       ?>
-                       <span class="list-group-item">
-                           <span><h3><?php echo $Row['position']; ?></h3>
-                             <hr style="border-width:2px; max-width:800px;">
-                             <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
-                           </span>
-                           <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
-                           <p><?php echo $Row['detail']; ?></p>
-                           <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
-                           <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
-                            <hr style="border-width:2px; max-width:800px;">
-                           <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
-                             <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+                      //$dead = strtotime($Row['deadline']);
+                      //$deadline = date('d-m-Y',$dead)
 
-                       </span><br>
-                       <?php
-                     }else if($loc==$gen){
-                       ?>
-                       <span class="list-group-item">
-                           <span><h3><?php echo $Row['position']; ?></h3>
-                             <hr style="border-width:2px; max-width:800px;">
-                             <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
-                           </span>
-                           <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
-                           <p><?php echo $Row['detail']; ?></p>
-                           <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
-                           <span class="text-muted pull-right"><?php echo $Row['postTime']; ?></span>
-                            <hr style="border-width:2px; max-width:800px;">
-                           <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
-                             <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+                      if(date("Y")>$Row['deadlineYear']){
 
-                       </span><br>
-                       <?php
-                     }else{
+                      }else if(date("m")>$Row['deadlineMonth']){
 
-                       if($loc==$gen){
-                         $b++;
+                      }else if(date("d")>$Row['deadlineDay']){
 
+                      }else{
+
+                      }
+                        if($Row['location']==$loc){
+                          $i++;
+
+                          if(date("Y")<$Row['deadlineYear']){
+                          ?>
+                          <span class="list-group-item">
+                              <span><h3><?php echo $Row['position']; ?></h3>
+                                <hr style="border-width:2px; max-width:800px;">
+                                <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                              </span>
+                              <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                              <p><?php echo $Row['detail']; ?></p>
+                              <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                              <span class="text-muted fa fa-clock-o pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+
+                               <hr style="border-width:2px; max-width:800px;">
+                              <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                                <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                          </span><br>
+                          <?php
+                        }else if(date("m")<$Row['deadlineMonth']){
+                            ?>
+                            <span class="list-group-item">
+                                <span><h3><?php echo $Row['position']; ?></h3>
+                                  <hr style="border-width:2px; max-width:800px;">
+                                  <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                                </span>
+                                <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                                <p><?php echo $Row['detail']; ?></p>
+                                <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                                <span class="text-muted fa fa-clock-o pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+
+                                 <hr style="border-width:2px; max-width:800px;">
+                                <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                                  <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                            </span><br>
+                           <?php
+                         }else if(date("d")<$Row['deadlineDay']){
+                           ?>
+                           <span class="list-group-item">
+                               <span><h3><?php echo $Row['position']; ?></h3>
+                                 <hr style="border-width:2px; max-width:800px;">
+                                 <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                               </span>
+                               <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                               <p><?php echo $Row['detail']; ?></p>
+                               <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                               <span class="text-muted fa fa-clock-o pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+
+                                <hr style="border-width:2px; max-width:800px;">
+                               <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                                 <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                           </span><br>
+                           <?php
+                          }else{
+
+                          }
+
+                         ?>
+
+                         <?php
+                       }else if($loc==$gen){
+                         $i++;
+
+                         if(date("Y")>$Row['deadlineYear']){
+                         ?>
+                         <span class="list-group-item">
+                             <span><h3><?php echo $Row['position']; ?></h3>
+                               <hr style="border-width:2px; max-width:800px;">
+                               <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                             </span>
+                             <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                             <p><?php echo $Row['detail']; ?></p>
+                             <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                             <span class="text-muted fa fa-clock-o  pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+                              <hr style="border-width:2px; max-width:800px;">
+                             <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                               <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                         </span><br>
+                         <?php
+                         }else if(date("m")>$Row['deadlineMonth']){
+                           ?>
+                           <span class="list-group-item">
+                               <span><h3><?php echo $Row['position']; ?></h3>
+                                 <hr style="border-width:2px; max-width:800px;">
+                                 <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                               </span>
+                               <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                               <p><?php echo $Row['detail']; ?></p>
+                               <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                               <span class="text-muted fa fa-clock-o  pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+                                <hr style="border-width:2px; max-width:800px;">
+                               <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                                 <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                           </span><br>
+                           <?php
+                         }else if(date("d")>$Row['deadlineDay']){
+                          ?>
+                          <span class="list-group-item">
+                              <span><h3><?php echo $Row['position']; ?></h3>
+                                <hr style="border-width:2px; max-width:800px;">
+                                <a href="mailto:<?php echo $Row['companyEmail']; ?>"> <i class="fa fa-envelope-o fa-fw"><?php echo $Row['companyName']; ?></i></a>
+                              </span>
+                              <span class="text-muted pull-right"><?php echo $Row['level']; ?></span><br>
+                              <p><?php echo $Row['detail']; ?></p>
+                              <span class="text-muted fa fa-group"><?php echo $Row['numb']; ?></span>
+                              <span class="text-muted fa fa-clock-o  pull-right">Deadline <?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+                               <hr style="border-width:2px; max-width:800px;">
+                              <span class="fa fa-phone fa-fw">0<?php echo $Row['companyPhone']; ?></span><br>
+                                <a href="?apply=<?php echo $Row['id']; ?>"><button class="btn btn-info btn-outline "><i class="fa fa-pencil fa-fw"></i>Apply</button></a>
+
+                          </span><br>
+                          <?php
+                         }else{
+
+                         }
+                         ?>
+
+                         <?php
                        }else{
-                         $c++;
+
+                         if($loc==$gen){
+                           $b++;
+
+                         }else{
+                           $c++;
+
+                         }
 
                        }
 
-                     }
+
                     }
 
 
@@ -222,7 +327,9 @@ if(isset($_GET['location']))
                         </div>
                       ";
 
-                  }else{
+                  }
+
+                  if($i<=0){
                     $msg = "
                       <div class='alert alert-danger'>
                        <button class='close' data-dismiss='alert'>&times;</button>
@@ -274,7 +381,7 @@ if(isset($_GET['location']))
              $i++;
           }
           ?>
-             <span><a href="?category=Bussiness"><i class="fa fa-book fa-fw"></i> Business</a><span class="fa fa-paperclip pull-right"><?php echo $i; ?></span><a href="?bookmark=Bussiness" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Bussiness"><i class="fa fa-book fa-fw"></i> Business</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -285,7 +392,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Arts"><i class="fa fa-book fa-fw"></i> Arts</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Arts" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Arts"><i class="fa fa-book fa-fw"></i> Arts</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -296,7 +403,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Education"><i class="fa fa-book fa-fw"></i> Education</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Education" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Education"><i class="fa fa-book fa-fw"></i> Education</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -307,7 +414,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Engineering"><i class="fa fa-book fa-fw"></i> Engineering</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Engineering" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Engineering"><i class="fa fa-book fa-fw"></i> Engineering</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -318,7 +425,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Computing"><i class="fa fa-book fa-fw"></i> Computing</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Computing" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Computing"><i class="fa fa-book fa-fw"></i> Computing</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -329,7 +436,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Media"><i class="fa fa-book fa-fw"></i> Media</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Media" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Media"><i class="fa fa-book fa-fw"></i> Media</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -340,7 +447,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Geology"><i class="fa fa-book fa-fw"></i> Geology</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Geology" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Geology"><i class="fa fa-book fa-fw"></i> Geology</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -351,7 +458,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Health"><i class="fa fa-book fa-fw"></i> Health</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Health" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Health"><i class="fa fa-book fa-fw"></i> Health</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -362,7 +469,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Law"><i class="fa fa-book fa-fw"></i> Law</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Law" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Law"><i class="fa fa-book fa-fw"></i> Law</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -373,7 +480,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Agriculture"><i class="fa fa-book fa-fw"></i> Agriculture</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Agriculture" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Agriculture"><i class="fa fa-book fa-fw"></i> Agriculture</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -384,7 +491,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Architecture"><i class="fa fa-book fa-fw"></i> Architecture</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Architecture" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Architecture"><i class="fa fa-book fa-fw"></i> Architecture</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -395,7 +502,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Appliedsciences"><i class="fa fa-book fa-fw"></i> Applied Sciences</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Appliedsciences" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Appliedsciences"><i class="fa fa-book fa-fw"></i> Applied Sciences</a>
              </span>
              <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
              <?php
@@ -406,7 +513,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Mathematics"><i class="fa fa-book fa-fw"></i> Mathematics</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Mathematics" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Mathematics"><i class="fa fa-book fa-fw"></i> Mathematics</a>
              </span>
              <hr style="border-width:1px; max-width:800px;border-color:#bfb1b0">
              <?php
@@ -417,7 +524,7 @@ if(isset($_GET['location']))
                $j++;
             }
             ?>
-             <span><a href="?category=Other"><i class="fa fa-book fa-fw"></i> Other</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Other" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             <span><a href="?category=Other"><i class="fa fa-book fa-fw"></i> Other</a>
              </span>
          </div>
          <div class="modal-footer">

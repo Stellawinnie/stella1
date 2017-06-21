@@ -145,7 +145,8 @@ $postId = $_SESSION['applicants'];
                               <h4>About</h4>
                               <span><?php echo $Row['about']; ?></span>
                               <hr>
-                              <span class="text-muted"><?php echo $Row['postTime']; ?></span>
+                              Deadline: <span class="text-muted pull-right"><?php echo $Row['deadlineDay']."/".$Row['deadlineMonth']."/".$Row['deadlineYear']; ?></span>
+
                               <br>
                               <hr>
                               <hr>
