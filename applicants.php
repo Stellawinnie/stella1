@@ -143,7 +143,7 @@ if(isset($_GET['decline']))
           $SQL->bind_param("si", $status, $_GET['decline']);
           $SQL->execute();
 
-           header("Location: applicants.php");
+           //header("Location: applicants.php");
       }
 
 

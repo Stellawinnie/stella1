@@ -67,7 +67,9 @@ if(isset($_POST['save']) && isset($_FILES['uploaded_file']) && $_FILES['uploaded
           $mail->setFrom('DoNotReply@gmail.com', 'Saps');
           $mail->addAddress($companyemail);
           $mail->Subject = 'Saps! Application';
-          $mail->Body = " Hello $companyName,
+          $mail->Body = "
+          Hello $companyName,
+
           $userName has just applied for the position you posted.
           Bellow are his/her application credentials and acompanying documents.
 
@@ -130,7 +132,9 @@ if(isset($_POST['save']) && isset($_FILES['uploaded_file']) && $_FILES['uploaded
           $mail->setFrom('DoNotReply@gmail.com', 'Saps');
           $mail->addAddress($companyemail);
           $mail->Subject = 'Saps! Application';
-          $mail->Body = " Hello $companyName,
+          $mail->Body = "
+          Hello $companyName,
+
           $userName has just applied for the position you posted.
           Bellow are his/her application credentials and acompanying documents.
 
@@ -159,7 +163,6 @@ if(isset($_POST['save']) && isset($_FILES['uploaded_file']) && $_FILES['uploaded
               }
 
           } else {
-
 
             $msg = "
               <div class='alert alert-success'>
