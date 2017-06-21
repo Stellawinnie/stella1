@@ -19,6 +19,138 @@ if(isset($_GET['applicants']))
   $_SESSION['applicants']=$_GET['applicants'];
  header("Location: applicants.php");
 }
+
+if(isset($_GET['accept']))
+{
+  $applicantId = $_GET['accept'];
+  $status = "Yes";
+
+  $res = $conn->query("SELECT * FROM tbl_applicants WHERE id='$applicantId'");
+  $Row=$res->fetch_array();
+
+  $cnme = $Row['companyName'];
+  $nme = $Row['userName'];
+  $eml = $Row['userEmail'];
+
+  //We are sorry to Inform you that you did not qualify for this post.
+  //Please try again later.
+  require 'PHPMailer/PHPMailerAutoload.php';
+      $mail = new PHPMailer;
+      $mail->isSMTP();
+      $mail->SMTPSecure = 'tls';
+      $mail->SMTPAuth = true;
+      $mail->Host = 'smtp.gmail.com';
+      $mail->Port = 587;
+      $mail->Username = 'beja.emmanuel@gmail.com';
+      $mail->Password = '#1Atom .';
+      $mail->setFrom('DoNotReply@gmail.com', 'Saps');
+      $mail->addAddress($eml);
+      $mail->Subject = 'Saps! Application';
+      $mail->Body = "
+      Hello $nme,
+
+      Congratulations. You have secured an attachment at $cnme
+      More will be communicated.
+
+      Thank you for using Saps,";
+      //send the message, check for errors
+      if (!$mail->send()) {
+        $msg = "
+          <div class='alert alert-danger'>
+           <button class='close' data-dismiss='alert'>&times;</button>
+           <strong>Sorry!</strong>  Couldnt send email.
+            We noticed you are having issues with sending your review to ".$nme.".
+             Please try again later or contact us if you need help.
+            </div>
+          ";
+
+
+      } else {
+        $msg = "
+          <div class='alert alert-success'>
+           <button class='close' data-dismiss='alert'>&times;</button>
+           <strong>Success!</strong>  We've sent an Acceptance email to ".$nme."
+            </div>
+          ";
+
+          $SQL = $conn->prepare("UPDATE tbl_applicants SET status=? WHERE id=?");
+          $SQL->bind_param("si", $status, $_GET['accept']);
+          $SQL->execute();
+
+      }
+
+ //header("Location: applicants.php");
+}
+
+if(isset($_GET['decline']))
+{
+  $status = "No";
+
+  $applicantId = $_GET['decline'];
+
+  $res = $conn->query("SELECT * FROM tbl_applicants WHERE id='$applicantId'");
+  $Row=$res->fetch_array();
+
+  $cnme = $Row['companyName'];
+  $nme = $Row['userName'];
+  $eml = $Row['userEmail'];
+
+
+  require 'PHPMailer/PHPMailerAutoload.php';
+      $mail = new PHPMailer;
+      $mail->isSMTP();
+      $mail->SMTPSecure = 'tls';
+      $mail->SMTPAuth = true;
+      $mail->Host = 'smtp.gmail.com';
+      $mail->Port = 587;
+      $mail->Username = 'beja.emmanuel@gmail.com';
+      $mail->Password = '#1Atom .';
+      $mail->setFrom('DoNotReply@gmail.com', 'Saps');
+      $mail->addAddress($eml);
+      $mail->Subject = 'Saps! Application';
+      $mail->Body = "
+      Hello $nme,
+
+      We are sorry to Inform you that you did not qualify for the attachment at $cnme.
+      Please try again later.
+
+      Thank you for using Saps,";
+      //send the message, check for errors
+      if (!$mail->send()) {
+        $msg = "
+          <div class='alert alert-danger'>
+           <button class='close' data-dismiss='alert'>&times;</button>
+           <strong>Sorry!</strong>  Couldnt send email.
+            We noticed you are having issues with sending your review to ".$nme.".
+             Please try again later or contact us if you need help.
+            </div>
+          ";
+
+
+
+      } else {
+
+
+        $msg = "
+          <div class='alert alert-success'>
+           <button class='close' data-dismiss='alert'>&times;</button>
+           <strong>Success</strong>  We've sent an Email to ".$nme."
+           on the review.
+            </div>
+          ";
+
+          $SQL = $conn->prepare("UPDATE tbl_applicants SET status=? WHERE id=?");
+          $SQL->bind_param("si", $status, $_GET['decline']);
+          $SQL->execute();
+
+           header("Location: applicants.php");
+      }
+
+
+;
+}
+
+
 $postId = $_SESSION['applicants'];
 ?>
 <!DOCTYPE html>
@@ -111,6 +243,10 @@ $postId = $_SESSION['applicants'];
                       <div class="panel panel-default">
                         <div class="panel-heading">
                           <?php
+                          if(isset($msg)){
+                            echo $msg;
+                          }?>
+                          <?php
                           $response = $conn->query("SELECT * FROM tbl_posts WHERE id='$postId'");
                           $Ro=$response->fetch_array();
                            ?>
@@ -132,6 +268,26 @@ $postId = $_SESSION['applicants'];
                               <hr>
                               <span><?php echo $Row['about']; ?></span>
                               <hr>
+                              <?php
+                              $acc = "Yes";
+                              $den = "No";
+                               if($Row['status']==$acc){
+                               ?>
+                               <a href="?accept=<?php echo $Row['id']; ?>"><span class="fa fa-check" style="color:green">Accept</span></a>
+                               <a href="?decline=<?php echo $Row['id']; ?>"><span class="fa fa-times">Decline</span></a>
+                               <?php
+                              }else if($Row['status']==$den){
+                                ?>
+                                <a href="?accept=<?php echo $Row['id']; ?>"><span class="fa fa-check">Accept</span></a>
+                                <a href="?decline=<?php echo $Row['id']; ?>"><span class="fa fa-times" style="color:green">Decline</span></a>
+                               <?php
+                              }else{
+                                ?>
+                                <a href="?accept=<?php echo $Row['id']; ?>"><span class="fa fa-check">Accept</span></a>
+                                <a href="?decline=<?php echo $Row['id']; ?>"><span class="fa fa-times">Decline</span></a>
+                                <?php
+                              }?>
+
                               <span class="pull-right text-muted"><?php echo $Row['postTime']; ?></span>
                             </div>
                               <br>

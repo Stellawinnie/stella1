@@ -247,39 +247,7 @@ if(isset($_GET['apply']))
           <li class="menu-active"><a href="index.php#hero">Home</a></li>
           <li><a href="index.php#about">About Us</a></li>
           <li><a href="index.php#services">Services</a></li>
-
-          <li class="menu-has-children"><a href="">Attachments</a>
-            <ul>
-              <li><a href="?category=Bussiness"><i class="fa fa-book fa-fw"></i> Businesss</a>
-              </li>
-              <li><a href="?category=Arts"><i class="fa fa-book fa-fw"></i> Arts</a>
-              </li>
-              <li><a href="?category=Education"><i class="fa fa-book fa-fw"></i> Education</a>
-              </li>
-              <li><a href="?category=Engineering"><i class="fa fa-book fa-fw"></i> Engineering</a>
-              </li>
-              <li><a href="?category=Computing"><i class="fa fa-book fa-fw"></i> Computing</a>
-              </li>
-              <li><a href="?category=Media"><i class="fa fa-book fa-fw"></i> Media</a>
-              </li>
-              <li><a href="?category=Geology"><i class="fa fa-book fa-fw"></i> Geology</a>
-              </li>
-              <li><a href="?category=Health"><i class="fa fa-book fa-fw"></i> Health</a>
-              </li>
-              <li><a href="?category=Law"><i class="fa fa-book fa-fw"></i> Law</a>
-              </li>
-              <li><a href="?category=Agriculture"><i class="fa fa-book fa-fw"></i> Agriculture</a>
-              </li>
-              <li><a href="?category=Architecture"><i class="fa fa-book fa-fw"></i> Architecture</a>
-              </li>
-              <li><a href="?category=Appliedsciences"><i class="fa fa-book fa-fw"></i> Applied Sciences</a>
-              </li>
-              <li><a href="?category=Mathematics"><i class="fa fa-book fa-fw"></i> Mathematics</a>
-              </li>
-              <li><a href="?category=Other"><i class="fa fa-book fa-fw"></i> Other</a>
-              </li>
-            </ul>
-          </li>
+          <li><a data-toggle="modal" data-target="#attachmentModal"> Attachments</a></li>
           <li><a href="#contact">Contact Us</a></li>
           <li>
             <?php if($user_login->is_logged_in()!="")
@@ -382,6 +350,180 @@ if(isset($_GET['apply']))
                 </div>
             </div>
         </aside>
+
+
+<!-- atachment modal -->
+<div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+ <div class="modal-dialog" role="document">
+     <div class="modal-content">
+         <div class="modal-header">
+           <h4>Attachment Categories</h4>
+         </div>
+         <div class="modal-body">
+           <?php
+           $i = 0;
+           $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Bussiness' AND level='Attachment'");
+           while($Row=$response->fetch_array())
+           {
+             $i++;
+          }
+          ?>
+             <span><a href="?category=Bussiness"><i class="fa fa-book fa-fw"></i> Business</a><span class="fa fa-paperclip pull-right"><?php echo $i; ?></span><a href="?bookmark=Bussiness" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Arts' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Arts"><i class="fa fa-book fa-fw"></i> Arts</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Arts" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Education' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Education"><i class="fa fa-book fa-fw"></i> Education</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Education" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Engineering' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Engineering"><i class="fa fa-book fa-fw"></i> Engineering</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Engineering" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Computing' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Computing"><i class="fa fa-book fa-fw"></i> Computing</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Computing" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Media' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Media"><i class="fa fa-book fa-fw"></i> Media</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Media" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Geology' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Geology"><i class="fa fa-book fa-fw"></i> Geology</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Geology" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Health' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Health"><i class="fa fa-book fa-fw"></i> Health</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Health" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Law' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Law"><i class="fa fa-book fa-fw"></i> Law</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Law" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Agriculture' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Agriculture"><i class="fa fa-book fa-fw"></i> Agriculture</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Agriculture" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Architecture' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Architecture"><i class="fa fa-book fa-fw"></i> Architecture</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Architecture" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Appliedsciences' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Appliedsciences"><i class="fa fa-book fa-fw"></i> Applied Sciences</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Appliedsciences" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px; border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Mathematics' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Mathematics"><i class="fa fa-book fa-fw"></i> Mathematics</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Mathematics" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+             <hr style="border-width:1px; max-width:800px;border-color:#bfb1b0">
+             <?php
+             $j = 0;
+             $response = $conn->query("SELECT * FROM tbl_posts WHERE category='Other' AND level='Attachment'");
+             while($Row=$response->fetch_array())
+             {
+               $j++;
+            }
+            ?>
+             <span><a href="?category=Other"><i class="fa fa-book fa-fw"></i> Other</a><span class="fa fa-paperclip pull-right"><?php echo $j; ?></span><a href="?bookmark=Other" class="fa fa-bookmark pull-right" style="">&nbsp&nbsp&nbsp&nbsp</a>
+             </span>
+         </div>
+         <div class="modal-footer">
+           <div class="form-group" >
+             <button type="button" class="btn btn-lg btn-danger" data-dismiss="modal">Cancel</button>
+           </div>
+           </form>
+         </div>
+    </div>
+</div>
+</div>
+
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js"></script>
 

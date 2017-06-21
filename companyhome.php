@@ -24,12 +24,13 @@ if(isset($_POST['save']))
    	$position =  $_POST['position'];
     $level =  $_POST['level'];
     $category =  $_POST['category'];
+    $location =  $_POST['location'];
    	$detail = $_POST['detail'];
    	$numb  = $_POST['numb'];
    	$postTime = $_POST['postTime'];
 
-  $SQL = $conn->prepare("INSERT INTO tbl_posts(companyName, companyEmail, companyPhone, position, level, category, detail, numb, postTime) VALUES(?,?,?,?,?,?,?,?,?)");
-  $SQL->bind_param('sssssssss',$companyName, $companyEmail, $companyPhone, $position, $level, $category,  $detail, $numb, $postTime);
+  $SQL = $conn->prepare("INSERT INTO tbl_posts(companyName, companyEmail, companyPhone, position, level, category, detail, location, numb, postTime, startDate, stopDate) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
+  $SQL->bind_param('ssssssssssss',$companyName, $companyEmail, $companyPhone, $position, $level, $category,  $detail, $location, $numb, $postTime, $startDate, $stopDate);
   $SQL->execute();
 
   if(!$SQL)
@@ -184,6 +185,11 @@ if(isset($_GET['applicants']))
                                                               <input type="text" name="position" placeholder="Position you are looking for." value="<?php  if(isset($_GET['edit'])){echo $Row['position'];}   ?>" class="form-control"/>
                                                           </div>
 
+                                                          <div class="form-group">
+                                                              <label for="location"> Location</label>
+                                                              <input type="text" name="location" placeholder="Location." value="<?php  if(isset($_GET['edit'])){echo $Row['location'];}   ?>" class="form-control"/>
+                                                          </div>
+
                                                               <input type="hidden" name="level" placeholder="" value="Attachment" class="form-control"/>
 
                                                           <div class="form-group">
@@ -214,6 +220,16 @@ if(isset($_GET['applicants']))
                                                          <div class="form-group">
                                                              <label for="numb">Number</label>
                                                              <input type="text" name="numb" placeholder="Number of people you want for that position" value="<?php  if(isset($_GET['edit'])){echo $Row['numb'];}   ?>" class="form-control"/>
+                                                         </div>
+
+                                                         <div class="form-group">
+                                                             <label for="startDate">Start Date</label>
+                                                             <input type="text" name="startDate" placeholder="Day Attachment Starts" value="<?php  if(isset($_GET['edit'])){echo $Row['startDate'];}   ?>" class="form-control"/>
+                                                         </div>
+
+                                                         <div class="form-group">
+                                                             <label for="stopDate">To</label>
+                                                             <input type="text" name="stopDate" placeholder="Day Attachment Ends" value="<?php  if(isset($_GET['edit'])){echo $Row['stopDate'];}   ?>" class="form-control"/>
                                                          </div>
 
                                                           <div class="form-group">

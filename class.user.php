@@ -56,8 +56,7 @@ class USER
    $userRow=$stmt->fetch(PDO::FETCH_ASSOC);
    //$type = $userRow['loginType'];
 
-   if($stmt->rowCount() == 1)
-   {
+   if($stmt->rowCount() == 1) {
      if($userRow['userPass']==md5($upass))
      {
        if($userRow['loginType']=="admin"){
@@ -76,7 +75,7 @@ class USER
       header("Location: login.php?error");
       exit;
      }
-  
+
    }
    else
    {
