@@ -44,7 +44,6 @@ if(isset($_POST['save']))
  }else{
    $SQL->bind_param('ssssssssssiiii',$companyName, $companyEmail, $companyPhone, $position, $level, $category,  $detail, $location, $numb, $startDate, $duration, $deadlineDay,$deadlineMonth, $deadlineYear);
    $SQL->execute();
-   echo "ndaani";
  }
 }
 /* code for data insert */
